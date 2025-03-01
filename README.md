@@ -39,7 +39,7 @@ The calculated risk assessment is saved in outputs/owasp_risk_report.json. Examp
 
 Risk Visualization
 
-The risk level is also visualized as a bar chart: 
+The risk level is also visualized as a bar chart: ![OWASP Risk Chart](https://github.com/DJDHWAJ/OWASP-calculator/blob/main/owasp_risk_chart.png)
 ## **Project Outcome**
 By using this OWASP Risk Calculator, security teams can:
 ✅ **Quantify security risks consistently** using OWASP’s structured methodology.  
@@ -64,4 +64,8 @@ By using this OWASP Risk Calculator, security teams can:
 - **Integrate with SIEM tools for real-time risk monitoring**.
 
 This project provides a structured and automated approach to risk assessment, making security evaluations faster and more reliable. 🚀
+
+
+
+
 
