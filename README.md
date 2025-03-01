@@ -43,10 +43,10 @@ Risk Visualization
 The risk level is also visualized as a bar chart: ![OWASP Risk Chart](https://github.com/DJDHWAJ/OWASP-calculator/blob/main/owasp_risk_chart.png)
 ## **Project Outcome**
 By using this OWASP Risk Calculator, security teams can:
-✅ **Quantify security risks consistently** using OWASP’s structured methodology.  
-✅ **Make data-driven security decisions** based on calculated risk levels.  
-✅ **Generate risk reports** for documentation and compliance audits.  
-✅ **Visualize risk factors** to enhance risk assessment presentations.  
+ **Quantify security risks consistently** using OWASP’s structured methodology.  
+ **Make data-driven security decisions** based on calculated risk levels.  
+ **Generate risk reports** for documentation and compliance audits.  
+ **Visualize risk factors** to enhance risk assessment presentations.  
 
 ## **Features**
 - **Automated OWASP Risk Calculation**
