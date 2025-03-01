@@ -40,10 +40,6 @@ By using this OWASP Risk Calculator, security teams can:
 
 
 
-### **Risk Visualization**
-The risk level is also visualized as a **bar chart**:
-![OWASP Risk Chart](outputs/owasp_risk_chart.png)
-
 
 
 ## **Next Steps**
