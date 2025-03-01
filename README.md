@@ -29,13 +29,14 @@ Example Output
 Risk Assessment Report
 
 The calculated risk assessment is saved in outputs/owasp_risk_report.json. Example:
-
+```json
 {
     "Likelihood": 3,
     "Impact": 9,
     "Risk Score": 27,
     "Risk Level": "High"
 }
+```
 
 Risk Visualization
 
@@ -63,7 +64,11 @@ By using this OWASP Risk Calculator, security teams can:
 - **Expand OWASP factor customization for more flexibility**.
 - **Integrate with SIEM tools for real-time risk monitoring**.
 
-This project provides a structured and automated approach to risk assessment, making security evaluations faster and more reliable. 🚀
+This project provides a structured and automated approach to risk assessment, making security evaluations faster and more reliable. 
+
+
+
+
 
 
 
