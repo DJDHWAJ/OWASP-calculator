@@ -24,6 +24,22 @@ The final risk score determines the **Risk Level**:
 - **Medium Risk (5 - 9)**: Moderate impact, can be exploited.
 - **High Risk (10 - 25)**: Severe impact, highly exploitable.
 
+Example Output
+
+Risk Assessment Report
+
+The calculated risk assessment is saved in outputs/owasp_risk_report.json. Example:
+
+{
+    "Likelihood": 3,
+    "Impact": 9,
+    "Risk Score": 27,
+    "Risk Level": "High"
+}
+
+Risk Visualization
+
+The risk level is also visualized as a bar chart: 
 ## **Project Outcome**
 By using this OWASP Risk Calculator, security teams can:
 ✅ **Quantify security risks consistently** using OWASP’s structured methodology.  
@@ -34,7 +50,7 @@ By using this OWASP Risk Calculator, security teams can:
 ## **Features**
 - **Automated OWASP Risk Calculation**
 - **Graphical Representation of Risks**
-- **Custom User Input for Risk Evaluation**
+- **Custom User Input for Risk Evaluation** 
 - **JSON Report Generation**
 
 
