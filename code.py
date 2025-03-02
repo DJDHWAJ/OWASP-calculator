@@ -1,91 +1,110 @@
-import json
-import matplotlib.pyplot as plt
-import tkinter as tk
+import json, matplotlib.pyplot as plt, tkinter as tk
 from tkinter import messagebox
 
-# OWASP Risk Rating Factors
-LIKELIHOOD_FACTORS = {
-    "threat_agent": {"Anonymous": 1, "Insider": 2, "Advanced Persistent Threat (APT)": 3},
-    "vulnerability": {"Low": 1, "Medium": 2, "High": 3},
+# Some random risk values 
+risk_values = {
+    "thrt": {"Anon": 1, "Insdr": 2, "APT": 3},  # idk why these are diff but okay
+    "vuln": {"Lo": 1, "Med": 2, "Hi": 3},
 }
 
-IMPACT_FACTORS = {
-    "technical": {"Low": 1, "Medium": 2, "High": 3},
-    "business": {"Minimal": 1, "Significant": 2, "Severe": 3},
+impact_values = {
+    "tech": {"Lo": 1, "Med": 2, "Hi": 3},
+    "biz": {"Min": 1, "Sig": 2, "Sev": 3},
 }
 
-# OWASP Risk Calculation
-def calculate_owasp_risk(threat_agent, vulnerability, technical, business):
-    likelihood = LIKELIHOOD_FACTORS["threat_agent"][threat_agent] * LIKELIHOOD_FACTORS["vulnerability"][vulnerability]
-    impact = IMPACT_FACTORS["technical"][technical] * IMPACT_FACTORS["business"][business]
-    risk = likelihood * impact
+# Debug mode (set True for debugging)
+debug = False  
 
-    # Determine Risk Level
-    if risk <= 4:
-        risk_level = "Low"
-    elif 5 <= risk <= 9:
-        risk_level = "Medium"
-    else:
-        risk_level = "High"
+# Calculate risk (probably works?)
+def doRiskStuff(th, v, t, b):
+    try:
+        like = risk_values["thrt"][th] * risk_values["vuln"][v]
+        imp = impact_values["tech"][t] * impact_values["biz"][b]
+        score = like * imp
 
-    return {"Likelihood": likelihood, "Impact": impact, "Risk Score": risk, "Risk Level": risk_level}
+        # Assigning risk level (feels arbitrary tbh)
+        lvl = "Lo"
+        if 5 <= score <= 9:
+            lvl = "Med"
+        elif score > 9:
+            lvl = "Hi"
 
-# Function to save results to JSON
-def save_risk_report(data, filename="owasp_risk_report.json"):
-    with open(filename, "w") as f:
-        json.dump(data, f, indent=4)
-
-# GUI Interface for OWASP Risk Calculator
-def run_gui():
-    def calculate():
-        threat_agent = threat_agent_var.get()
-        vulnerability = vulnerability_var.get()
-        technical = technical_var.get()
-        business = business_var.get()
-
-        result = calculate_owasp_risk(threat_agent, vulnerability, technical, business)
-        
-        messagebox.showinfo("OWASP Risk Assessment", f"Risk Level: {result['Risk Level']}\nRisk Score: {result['Risk Score']}")
-        save_risk_report(result)
-
-        visualize_risk(result)
-
-    # GUI Window
-    root = tk.Tk()
-    root.title("OWASP Risk Calculator")
-
-    tk.Label(root, text="Select Threat Agent:").grid(row=0, column=0)
-    threat_agent_var = tk.StringVar(root)
-    tk.OptionMenu(root, threat_agent_var, *LIKELIHOOD_FACTORS["threat_agent"]).grid(row=0, column=1)
-
-    tk.Label(root, text="Select Vulnerability Level:").grid(row=1, column=0)
-    vulnerability_var = tk.StringVar(root)
-    tk.OptionMenu(root, vulnerability_var, *LIKELIHOOD_FACTORS["vulnerability"]).grid(row=1, column=1)
-
-    tk.Label(root, text="Select Technical Impact:").grid(row=2, column=0)
-    technical_var = tk.StringVar(root)
-    tk.OptionMenu(root, technical_var, *IMPACT_FACTORS["technical"]).grid(row=2, column=1)
-
-    tk.Label(root, text="Select Business Impact:").grid(row=3, column=0)
-    business_var = tk.StringVar(root)
-    tk.OptionMenu(root, business_var, *IMPACT_FACTORS["business"]).grid(row=3, column=1)
-
-    tk.Button(root, text="Calculate Risk", command=calculate).grid(row=4, column=0, columnspan=2)
+        return {"Likelihood": like, "Impact": imp, "Risk Score": score, "Risk Level": lvl}
     
-    root.mainloop()
+    except KeyError:
+        return {"error": "Invalid input values!"}  # Prevent crashes if something is missing
 
-# Visualization Function
-def visualize_risk(risk_data):
+# Save JSON report (why not)
+def dumpRiskToJson(x, f="owasp_risk_report.json"):
+    with open(f, "w") as o:
+        json.dump(x, o, indent=4)
+
+# Make a window thing (GUI??)
+def startWindow():
+    def calcBtnClick():
+        t = t_var.get()
+        v = v_var.get()
+        te = te_var.get()
+        b = b_var.get()
+
+        # Check if all options are selected
+        if not t or not v or not te or not b:
+            messagebox.showerror("Error", "Please select all values!")
+            return
+
+        r = doRiskStuff(t, v, te, b)
+
+        if "error" in r:
+            messagebox.showerror("Error", r["error"])
+            return
+        
+        messagebox.showinfo("OWASP Risk Assessment", f"Risk Level: {r['Risk Level']}\nRisk Score: {r['Risk Score']}")
+        dumpRiskToJson(r)
+
+        if debug:
+            print(f"DEBUG: {r}")
+
+        drawGraph(r)  # Oh yeah, forgot about this part
+
+    w = tk.Tk()
+    w.title("Risk Calc Window")
+
+    tk.Label(w, text="Threat Type:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
+    t_var = tk.StringVar(w)
+    t_var.set("Anon")  # Set a default value
+    tk.OptionMenu(w, t_var, *risk_values["thrt"]).grid(row=0, column=1, padx=5, pady=2)
+
+    tk.Label(w, text="Vuln Level:").grid(row=1, column=0, sticky="w", padx=5, pady=2)
+    v_var = tk.StringVar(w)
+    v_var.set("Lo")  # Set a default value
+    tk.OptionMenu(w, v_var, *risk_values["vuln"]).grid(row=1, column=1, padx=5, pady=2)
+
+    tk.Label(w, text="Tech Impact:").grid(row=2, column=0, sticky="w", padx=5, pady=2)
+    te_var = tk.StringVar(w)
+    te_var.set("Lo")  # Set a default value
+    tk.OptionMenu(w, te_var, *impact_values["tech"]).grid(row=2, column=1, padx=5, pady=2)
+
+    tk.Label(w, text="Biz Impact:").grid(row=3, column=0, sticky="w", padx=5, pady=2)
+    b_var = tk.StringVar(w)
+    b_var.set("Min")  # Set a default value
+    tk.OptionMenu(w, b_var, *impact_values["biz"]).grid(row=3, column=1, padx=5, pady=2)
+
+    tk.Button(w, text="Go", command=calcBtnClick).grid(row=4, column=0, columnspan=2, pady=10)
+    
+    w.mainloop()
+
+# Draw graph thing
+def drawGraph(r):
     labels = ["Likelihood", "Impact", "Risk Score"]
-    values = [risk_data["Likelihood"], risk_data["Impact"], risk_data["Risk Score"]]
+    values = [r["Likelihood"], r["Impact"], r["Risk Score"]]
 
     plt.bar(labels, values, color=["blue", "orange", "red"])
-    plt.title(f"OWASP Risk Score - {risk_data['Risk Level']}")
-    plt.xlabel("Factors")
-    plt.ylabel("Score")
-    plt.savefig("owasp_risk_chart.png")
+    plt.title(f"Risk Level: {r['Risk Level']}")
+    plt.xlabel("Stuff")
+    plt.ylabel("Nums")
+    plt.savefig("owasp_risk_chart.png")  # Saving this bc why not
     plt.show()
 
-# Run GUI if script is executed
+# Run it 
 if __name__ == "__main__":
-    run_gui()
+    startWindow()
