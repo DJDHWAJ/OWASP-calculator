@@ -15,7 +15,7 @@ impact_values = {
 # Debug mode (set True for debugging)
 debug = False  
 
-# Calculate risk (probably works?)
+# Calculate risk 
 def doRiskStuff(th, v, t, b):
     try:
         like = risk_values["thrt"][th] * risk_values["vuln"][v]
@@ -39,7 +39,7 @@ def dumpRiskToJson(x, f="owasp_risk_report.json"):
     with open(f, "w") as o:
         json.dump(x, o, indent=4)
 
-# Make a window thing (GUI??)
+# Make a window thing (GUI)
 def startWindow():
     def calcBtnClick():
         t = t_var.get()
@@ -64,29 +64,29 @@ def startWindow():
         if debug:
             print(f"DEBUG: {r}")
 
-        drawGraph(r)  # Oh yeah, forgot about this part
+        drawGraph(r)  
 
     w = tk.Tk()
     w.title("Risk Calc Window")
 
     tk.Label(w, text="Threat Type:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
     t_var = tk.StringVar(w)
-    t_var.set("Anon")  # Set a default value
+    t_var.set("Anon") 
     tk.OptionMenu(w, t_var, *risk_values["thrt"]).grid(row=0, column=1, padx=5, pady=2)
 
     tk.Label(w, text="Vuln Level:").grid(row=1, column=0, sticky="w", padx=5, pady=2)
     v_var = tk.StringVar(w)
-    v_var.set("Lo")  # Set a default value
+    v_var.set("Lo")  
     tk.OptionMenu(w, v_var, *risk_values["vuln"]).grid(row=1, column=1, padx=5, pady=2)
 
     tk.Label(w, text="Tech Impact:").grid(row=2, column=0, sticky="w", padx=5, pady=2)
     te_var = tk.StringVar(w)
-    te_var.set("Lo")  # Set a default value
+    te_var.set("Lo")  
     tk.OptionMenu(w, te_var, *impact_values["tech"]).grid(row=2, column=1, padx=5, pady=2)
 
     tk.Label(w, text="Biz Impact:").grid(row=3, column=0, sticky="w", padx=5, pady=2)
     b_var = tk.StringVar(w)
-    b_var.set("Min")  # Set a default value
+    b_var.set("Min")  
     tk.OptionMenu(w, b_var, *impact_values["biz"]).grid(row=3, column=1, padx=5, pady=2)
 
     tk.Button(w, text="Go", command=calcBtnClick).grid(row=4, column=0, columnspan=2, pady=10)
